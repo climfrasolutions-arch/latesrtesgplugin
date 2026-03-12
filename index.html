@@ -1,145 +1,872 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VERIFY.AI | The Global Assurance Layer</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ClimFra VeriSource — Carbon Assurance Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root { --verify-blue: #0070d2; --verify-dark: #032d60; }
-body { font-family: 'Inter', sans-serif; background: #f3f4f6; }
-.plugin-overlay { border: 2px solid #00d2be; box-shadow: 0 0 20px rgba(0,210,190,0.2); }
-.audit-pulse { border: 1px solid #ff5a5f; animation: pulse 2s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 90, 95, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 90, 95, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 90, 95, 0); } }
-.hidden { display: none; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–bg: #f4f5f7;
+–surface: #ffffff;
+–surface2: #f9fafb;
+–border: #e2e4e9;
+–border2: #c8ccd6;
+–text: #111827;
+–text2: #374151;
+–text3: #6b7280;
+–text4: #9ca3af;
+–brand: #1a56db;
+–brand-lt: #eff4ff;
+–brand-mid: #3b72ef;
+–navy: #0f2355;
+–teal: #0e7a6e;
+–teal-lt: #ecfdf5;
+–amber: #92400e;
+–amber-lt: #fffbeb;
+–amber-bd: #fcd34d;
+–red: #b91c1c;
+–red-lt: #fef2f2;
+–red-bd: #fca5a5;
+–purple: #5b21b6;
+–purple-lt: #f5f3ff;
+–green: #065f46;
+–green-lt: #ecfdf5;
+–green-bd: #6ee7b7;
+–shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+–shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+–radius: 8px;
+–radius-sm: 5px;
+font-size: 13px;
+}
+
+html, body {
+font-family: ‘DM Sans’, -apple-system, BlinkMacSystemFont, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+-webkit-font-smoothing: antialiased;
+}
+
+/* ── TOPBAR ─────────────────────────────── */
+.topbar {
+position: sticky; top: 0; z-index: 200;
+background: var(–navy);
+height: 52px;
+display: flex; align-items: center; justify-content: space-between;
+padding: 0 24px;
+box-shadow: 0 2px 8px rgba(0,0,0,.18);
+}
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.logo-mark {
+display: flex; align-items: center; gap: 8px;
+text-decoration: none;
+}
+.logo-icon {
+width: 28px; height: 28px;
+background: linear-gradient(135deg, #3b82f6, #1a56db);
+border-radius: 6px;
+display: flex; align-items: center; justify-content: center;
+font-size: 14px; font-weight: 700; color: #fff;
+letter-spacing: -0.5px;
+box-shadow: 0 2px 6px rgba(59,130,246,.4);
+}
+.logo-text { line-height: 1; }
+.logo-name { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+.logo-sub { font-size: 9px; font-weight: 500; color: #7ea7e0; letter-spacing: 0.08em; text-transform: uppercase; }
+.topbar-divider { width: 1px; height: 20px; background: #2a4272; }
+.topbar-module { font-size: 12px; color: #a0b8d8; font-weight: 400; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.deadline-chip {
+background: rgba(185,28,28,.25);
+border: 1px solid rgba(252,165,165,.3);
+color: #fca5a5;
+font-size: 11px; font-weight: 600;
+padding: 3px 10px; border-radius: 20px;
+display: flex; align-items: center; gap: 5px;
+}
+.deadline-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+.entity-label { font-size: 11px; color: #7ea7e0; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg,#3b72ef,#1a56db); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; }
+
+/* ── SUBNAV ─────────────────────────────── */
+.subnav {
+background: var(–surface);
+border-bottom: 1px solid var(–border);
+height: 38px;
+display: flex; align-items: center;
+padding: 0 24px;
+gap: 6px;
+font-size: 12px; color: var(–text3);
+}
+.subnav a { color: var(–text3); text-decoration: none; }
+.subnav a:hover { color: var(–brand); }
+.subnav .cur { color: var(–text); font-weight: 600; }
+.subnav .chevron { color: var(–border2); }
+.subnav-badges { margin-left: auto; display: flex; gap: 6px; }
+
+/* ── BADGE ──────────────────────────────── */
+.badge {
+display: inline-flex; align-items: center;
+padding: 2px 9px; border-radius: 20px;
+font-size: 11px; font-weight: 600;
+border: 1px solid transparent;
+white-space: nowrap;
+}
+.badge-green { color: var(–green); background: var(–green-lt); border-color: var(–green-bd); }
+.badge-blue { color: var(–brand); background: var(–brand-lt); border-color: #bfcfff; }
+.badge-amber { color: var(–amber); background: var(–amber-lt); border-color: var(–amber-bd); }
+.badge-red { color: var(–red); background: var(–red-lt); border-color: var(–red-bd); }
+.badge-purple { color: var(–purple); background: var(–purple-lt); border-color: #c4b5fd; }
+.badge-teal { color: var(–teal); background: var(–teal-lt); border-color: #99f6e4; }
+
+/* ── MAIN LAYOUT ────────────────────────── */
+.main { padding: 20px 24px; max-width: 1440px; margin: 0 auto; }
+
+/* ── KPI ROW ────────────────────────────── */
+.kpi-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 12px; margin-bottom: 20px; }
+.kpi-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 14px 16px;
+box-shadow: var(–shadow-sm);
+transition: box-shadow .2s;
+}
+.kpi-card:hover { box-shadow: var(–shadow-md); }
+.kpi-label { font-size: 10px; font-weight: 600; color: var(–text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.kpi-value { font-size: 22px; font-weight: 700; line-height: 1.1; }
+.kpi-sub { font-size: 11px; color: var(–text4); margin-top: 3px; }
+.kpi-card.accent-blue { border-top: 3px solid var(–brand); }
+.kpi-card.accent-teal { border-top: 3px solid #14b8a6; }
+.kpi-card.accent-purple{ border-top: 3px solid #8b5cf6; }
+.kpi-card.accent-red { border-top: 3px solid var(–red); }
+.kpi-card.accent-amber { border-top: 3px solid #f59e0b; }
+
+/* ── PANELS ROW ─────────────────────────── */
+.panels-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.panel {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+box-shadow: var(–shadow-sm);
+overflow: hidden;
+}
+.panel-header {
+background: var(–surface2);
+border-bottom: 1px solid var(–border);
+padding: 8px 16px;
+font-size: 11px; font-weight: 700;
+color: var(–text2);
+letter-spacing: .05em; text-transform: uppercase;
+display: flex; align-items: center; justify-content: space-between;
+}
+.panel-body { padding: 16px; }
+
+/* ── MINI BAR ───────────────────────────── */
+.mini-bar-row { margin-bottom: 10px; }
+.mini-bar-row:last-child { margin-bottom: 0; }
+.mini-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(–text3); margin-bottom: 4px; }
+.mini-bar-track { height: 6px; background: var(–bg); border-radius: 3px; overflow: hidden; }
+.mini-bar-fill { height: 100%; border-radius: 3px; transition: width .5s ease; }
+
+/* ── SCORE CHIP ─────────────────────────── */
+.score-chip {
+display: inline-block; min-width: 38px;
+padding: 3px 9px; border-radius: 6px;
+font-size: 13px; font-weight: 700;
+text-align: center; font-family: ‘DM Mono’, monospace;
+}
+.score-high { background: var(–green-lt); color: var(–green); border: 1px solid var(–green-bd); }
+.score-mid { background: var(–amber-lt); color: var(–amber); border: 1px solid var(–amber-bd); }
+.score-low { background: var(–red-lt); color: var(–red); border: 1px solid var(–red-bd); }
+
+/* ── PROGRESS BAR (tall) ────────────────── */
+.scope-bar-wrap { margin-bottom: 14px; }
+.scope-bar-wrap:last-child { margin-bottom: 0; }
+.scope-bar-meta { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; }
+.scope-bar-track { height: 10px; background: var(–bg); border-radius: 5px; overflow: hidden; border: 1px solid var(–border); }
+.scope-bar-fill { height: 100%; border-radius: 5px; }
+
+/* ── CHECKLIST ROWS ─────────────────────── */
+.check-row {
+display: flex; justify-content: space-between; align-items: center;
+padding: 9px 16px;
+border-bottom: 1px solid var(–border);
+font-size: 12px;
+}
+.check-row:last-child { border-bottom: none; }
+.check-row:nth-child(even) { background: var(–surface2); }
+.check-row-label { font-weight: 500; }
+.check-row-note { font-size: 11px; color: var(–text4); }
+
+/* ── TABS ───────────────────────────────── */
+.tab-container {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+box-shadow: var(–shadow-sm);
+overflow: hidden;
+margin-bottom: 16px;
+}
+.tab-bar {
+display: flex;
+border-bottom: 1px solid var(–border);
+background: var(–surface2);
+}
+.tab-btn {
+padding: 11px 20px;
+font-size: 13px; font-weight: 500;
+font-family: ‘DM Sans’, sans-serif;
+border: none; background: transparent;
+cursor: pointer; color: var(–text3);
+border-bottom: 2px solid transparent;
+border-right: 1px solid var(–border);
+transition: all .15s;
+display: flex; align-items: center; gap: 6px;
+}
+.tab-btn.active {
+color: var(–brand); font-weight: 600;
+background: var(–surface);
+border-bottom-color: var(–brand);
+}
+.tab-btn:hover:not(.active) { color: var(–text); background: #f0f2f5; }
+.tab-alert {
+background: var(–red); color: #fff;
+border-radius: 10px; font-size: 10px; font-weight: 700;
+padding: 1px 6px; min-width: 18px; text-align: center;
+}
+
+/* ── TOOLBAR ────────────────────────────── */
+.toolbar {
+display: flex; align-items: center; gap: 8px;
+padding: 10px 16px;
+border-bottom: 1px solid var(–border);
+background: var(–surface2);
+}
+.filter-btn {
+padding: 4px 12px; font-size: 12px; border-radius: 20px;
+font-family: ‘DM Sans’, sans-serif;
+border: 1px solid var(–border); background: var(–surface);
+color: var(–text2); cursor: pointer; font-weight: 400;
+transition: all .15s;
+}
+.filter-btn.active {
+border-color: var(–brand); background: var(–brand-lt);
+color: var(–brand); font-weight: 600;
+}
+.filter-btn:hover:not(.active) { border-color: var(–border2); background: #f0f2f5; }
+.record-count { margin-left: auto; font-size: 12px; color: var(–text4); }
+
+/* ── TABLE ──────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table thead tr { background: #f0f2f5; }
+.data-table th {
+padding: 8px 12px; text-align: left;
+font-size: 11px; font-weight: 700; color: var(–text3);
+border-bottom: 2px solid var(–border2);
+letter-spacing: .04em; white-space: nowrap;
+text-transform: uppercase;
+}
+.data-table td { padding: 9px 12px; border-bottom: 1px solid var(–border); vertical-align: middle; }
+.data-table tbody tr { cursor: pointer; transition: background .1s; }
+.data-table tbody tr:hover { background: #f5f8ff !important; }
+.data-table tbody tr.selected { background: #eff4ff !important; }
+.data-table tbody tr.flagged { border-left: 3px solid var(–red); }
+.data-table tbody tr:not(.flagged) { border-left: 3px solid transparent; }
+.data-table tbody tr:nth-child(even):not(.flagged):not(.selected):not(:hover) { background: var(–surface2); }
+.row-flag-bg { background: #fff8f8 !important; }
+
+/* ── DETAIL PANEL ───────────────────────── */
+.detail-row td { background: #f0f6ff !important; border-top: 1px solid #bfcfff; border-bottom: 2px solid var(–brand) !important; padding: 0; cursor: default; }
+.detail-inner { padding: 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.detail-section-title { font-size: 11px; font-weight: 700; color: var(–text3); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 10px; }
+.meta-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(–border); font-size: 12px; }
+.meta-row:last-child { border-bottom: none; }
+.meta-key { color: var(–text4); }
+.meta-val { font-weight: 600; color: var(–text); }
+.meta-val.warn { color: var(–red); }
+.flag-item { display: flex; gap: 8px; padding: 7px 10px; margin-bottom: 6px; background: var(–amber-lt); border: 1px solid var(–amber-bd); border-radius: var(–radius-sm); font-size: 12px; color: var(–amber); }
+
+/* ── RED FLAG TABLE ─────────────────────── */
+.alert-banner {
+display: flex; align-items: center; gap: 8px;
+padding: 10px 14px; margin: 12px 16px;
+background: var(–red-lt); border: 1px solid var(–red-bd);
+border-radius: var(–radius-sm); font-size: 13px;
+}
+
+/* ── UPLOAD ZONE ────────────────────────── */
+.upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; }
+.upload-card { border: 1px solid var(–border); border-radius: var(–radius); overflow: hidden; }
+.upload-zone {
+border: 2px dashed var(–border2);
+border-radius: var(–radius-sm);
+padding: 28px 16px; text-align: center;
+background: var(–surface2); cursor: pointer;
+transition: all .2s;
+}
+.upload-zone:hover { border-color: var(–brand); background: var(–brand-lt); }
+.upload-icon { font-size: 28px; color: var(–border2); margin-bottom: 8px; }
+.upload-hint { font-size: 13px; font-weight: 500; color: var(–text2); }
+.upload-ep { font-size: 11px; color: var(–text4); margin-top: 4px; }
+.upload-info { margin-top: 10px; padding: 8px 12px; background: var(–brand-lt); border: 1px solid #bfcfff; border-radius: var(–radius-sm); font-size: 11px; color: var(–brand); }
+code { background: #eaecf0; padding: 1px 6px; border-radius: 3px; font-family: ‘DM Mono’, monospace; font-size: 11px; }
+
+/* ── EXPORT FOOTER ──────────────────────── */
+.export-bar {
+display: flex; align-items: center; justify-content: space-between;
+padding: 14px 20px;
+background: var(–surface); border: 1px solid var(–border);
+border-radius: var(–radius); box-shadow: var(–shadow-sm);
+margin-bottom: 16px;
+}
+.export-bar h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.export-bar p { font-size: 12px; color: var(–text4); }
+.btn-export {
+padding: 9px 22px; font-size: 13px; font-weight: 600;
+font-family: ‘DM Sans’, sans-serif;
+border-radius: var(–radius-sm); cursor: pointer;
+border: 1px solid var(–brand);
+background: var(–brand); color: #fff;
+transition: all .2s; min-width: 210px;
+box-shadow: 0 2px 6px rgba(26,86,219,.25);
+}
+.btn-export:hover { background: #1447c0; border-color: #1447c0; box-shadow: 0 4px 12px rgba(26,86,219,.35); }
+.btn-export.success { background: var(–teal); border-color: var(–teal); box-shadow: 0 2px 6px rgba(14,122,110,.25); }
+.btn-export:disabled { opacity: .65; cursor: wait; }
+
+/* ── PAGE FOOTER ────────────────────────── */
+.page-footer {
+display: flex; justify-content: space-between;
+padding: 10px 0; border-top: 1px solid var(–border);
+font-size: 11px; color: var(–text4);
+}
+
+/* ── COMMERCIAL HERO STRIP ──────────────── */
+.hero-strip {
+background: linear-gradient(135deg, var(–navy) 0%, #1a3a6e 60%, #1e4db7 100%);
+padding: 18px 24px;
+display: flex; align-items: center; justify-content: space-between;
+}
+.hero-tagline h2 { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+.hero-tagline p { font-size: 12px; color: #a0b8d8; margin-top: 2px; }
+.hero-badges { display: flex; gap: 10px; }
+.hero-badge {
+background: rgba(255,255,255,.1);
+border: 1px solid rgba(255,255,255,.2);
+color: #fff; font-size: 11px; font-weight: 600;
+padding: 4px 12px; border-radius: 20px;
+display: flex; align-items: center; gap: 5px;
+}
+.hero-badge .hb-dot { width: 6px; height: 6px; border-radius: 50%; }
+.hero-cta {
+display: flex; gap: 8px; align-items: center;
+}
+.btn-secondary {
+padding: 7px 16px; font-size: 12px; font-weight: 600;
+border: 1px solid rgba(255,255,255,.35); border-radius: var(–radius-sm);
+background: transparent; color: #fff; cursor: pointer;
+font-family: ‘DM Sans’, sans-serif; transition: all .2s;
+}
+.btn-secondary:hover { background: rgba(255,255,255,.1); }
+.btn-primary-sm {
+padding: 7px 16px; font-size: 12px; font-weight: 600;
+border: none; border-radius: var(–radius-sm);
+background: #fff; color: var(–navy); cursor: pointer;
+font-family: ‘DM Sans’, sans-serif; transition: all .2s;
+}
+.btn-primary-sm:hover { background: #e8efff; }
+
+/* ── UTILITY ────────────────────────────── */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.text-right { text-align: right; }
+.fw600 { font-weight: 600; }
+.text3 { color: var(–text3); }
+.text4 { color: var(–text4); }
+.ef-green { color: var(–green); font-weight: 600; }
+.ef-amber { color: var(–amber); font-weight: 600; }
+.ef-red { color: var(–red); font-weight: 600; }
+
+/* Mac Retina sharpness */
+@media (-webkit-min-device-pixel-ratio: 2) {
+.data-table th, .data-table td { border-bottom-width: 0.5px; }
+}
 </style>
+
 </head>
-<body class="min-h-screen">
+<body>
 
-<div id="loginState" class="flex h-screen items-center justify-center">
-<div class="bg-white p-12 rounded-3xl shadow-2xl w-full max-w-md border border-zinc-100">
-<div class="mb-10 text-center">
-<div class="inline-block p-3 bg-blue-50 rounded-2xl mb-4">
-<svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-</div>
-<h1 class="text-2xl font-black text-slate-900 tracking-tight">VERIFY.AI</h1>
-<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Enterprise Assurance Gateway</p>
-</div>
-<button onclick="enterSystem()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition-all shadow-xl shadow-slate-200">
-SSO LOGIN (AZURE/SAP)
-</button>
-</div>
-</div>
+<!-- TOP NAV -->
 
-<div id="mainDashboard" class="hidden flex h-screen overflow-hidden">
+<nav class="topbar">
+<div class="topbar-left">
+<a class="logo-mark" href="#">
+<div class="logo-icon">CV</div>
+<div class="logo-text">
+<div class="logo-name">ClimFra VeriSource</div>
+<div class="logo-sub">Carbon Assurance Platform</div>
+</div>
+</a>
+<div class="topbar-divider"></div>
+<span class="topbar-module">GHG Assurance Dashboard</span>
+</div>
+<div class="topbar-right">
+<div class="deadline-chip">
+<span class="dot"></span>
+SB 253 Filing: <strong id="days-label">—</strong> days remaining
+</div>
+<span class="entity-label">Meridian Industrial Corp. · FY2025</span>
+<div class="avatar">JD</div>
+</div>
+</nav>
 
-<aside class="w-20 bg-slate-900 flex flex-col items-center py-8 gap-8 border-r border-slate-800">
-<div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white">V</div>
-<div class="space-y-6 text-slate-500">
-<div class="cursor-pointer hover:text-white transition">⊞</div>
-<div class="cursor-pointer hover:text-white transition">◈</div>
-<div class="cursor-pointer hover:text-white transition">⌘</div>
-</div>
-</aside>
+<!-- HERO STRIP -->
 
-<main class="flex-1 flex flex-col bg-slate-50">
-<header class="h-20 bg-white border-b flex items-center justify-between px-10">
-<div class="flex items-center gap-4">
-<h2 class="font-bold text-slate-800">Verification Terminal</h2>
-<span class="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-1 rounded">SOC2 TYPE II ACTIVE</span>
+<div class="hero-strip">
+<div class="hero-tagline">
+<h2>Verification-First Carbon Intelligence</h2>
+<p>Audit-ready GHG reporting for California SB 253 · Limited Assurance Engine · Aug 10, 2026 Compliance Deadline</p>
 </div>
-<div class="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200">
-<button id="nativeBtn" onclick="toggleView('native')" class="px-4 py-2 rounded-full text-[10px] font-bold bg-white shadow-sm">NATIVE OS</button>
-<button id="pluginBtn" onclick="toggleView('plugin')" class="px-4 py-2 rounded-full text-[10px] font-bold text-slate-500">PLUGIN MODE</button>
+<div class="hero-badges">
+<div class="hero-badge"><span class="hb-dot" style="background:#4ade80"></span>EPA 2026 Active</div>
+<div class="hero-badge"><span class="hb-dot" style="background:#4ade80"></span>DEFRA 2026 Active</div>
+<div class="hero-badge"><span class="hb-dot" style="background:#fbbf24"></span>Limited Assurance Mode</div>
 </div>
-</header>
-
-<div class="p-10">
-<div id="nativeView" class="space-y-6">
-<div class="grid grid-cols-3 gap-6">
-<div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
-<p class="text-xs font-bold text-slate-400 uppercase mb-2">Assurance Level</p>
-<h3 class="text-4xl font-black text-blue-600">A+</h3>
-<p class="text-[10px] text-emerald-500 font-bold mt-2">Verified for Aug 10 California Deadline</p>
-</div>
-<div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm col-span-2">
-<p class="text-xs font-bold text-slate-400 uppercase mb-2">Evidence Stream (Live)</p>
-<div class="space-y-3 mt-4">
-<div class="flex justify-between items-center text-xs border-b pb-2">
-<span class="font-mono text-slate-400">TX_9901_LHR</span>
-<span class="font-bold">Jet Fuel A1 (British Airways)</span>
-<span class="text-emerald-500 font-bold">99.1% Confidence</span>
-</div>
-<div class="flex justify-between items-center text-xs border-b pb-2">
-<span class="font-mono text-slate-400">TX_9905_NYC</span>
-<span class="font-bold">Office HVAC (ConEd)</span>
-<span class="text-emerald-500 font-bold">98.4% Confidence</span>
-</div>
-</div>
-</div>
+<div class="hero-cta">
+<button class="btn-secondary">Documentation</button>
+<button class="btn-primary-sm">Upgrade to Enterprise →</button>
 </div>
 </div>
 
-<div id="pluginView" class="hidden">
-<div class="bg-white rounded-3xl p-10 border-2 border-dashed border-slate-200 relative overflow-hidden grayscale">
-<div class="absolute top-4 right-4 bg-zinc-800 text-white text-[10px] px-2 py-1 rounded font-bold">GENERIC THIRD-PARTY DASHBOARD (SAP/SFDC)</div>
-<h3 class="text-3xl font-black text-slate-200 mb-8 tracking-tighter">Existing Carbon Analytics</h3>
+<!-- SUBNAV / BREADCRUMB -->
 
-<div class="grid grid-cols-2 gap-10 opacity-20">
-<div class="h-32 bg-slate-100 rounded-2xl"></div>
-<div class="h-32 bg-slate-100 rounded-2xl"></div>
+<div class="subnav">
+<a href="#">Home</a><span class="chevron">›</span>
+<a href="#">GHG Reporting</a><span class="chevron">›</span>
+<span class="cur">Assurance Dashboard</span>
+<div class="subnav-badges">
+<span class="badge badge-green">✓ EPA 2026</span>
+<span class="badge badge-green">✓ DEFRA 2026</span>
+<span class="badge badge-blue">Limited Assurance Mode</span>
+</div>
 </div>
 
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
-<div class="plugin-overlay bg-white p-8 rounded-2xl shadow-2xl">
-<div class="flex items-center gap-4 mb-4">
-<div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white">V</div>
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- KPI ROW -->
+
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">Total CO₂e</div>
+<div class="kpi-value">48.3 kt</div>
+<div class="kpi-sub">FY2025 Reported</div>
+</div>
+<div class="kpi-card accent-blue">
+<div class="kpi-label">Scope 1</div>
+<div class="kpi-value" style="color:var(--brand)">12.8 kt</div>
+<div class="kpi-sub">Direct Emissions</div>
+</div>
+<div class="kpi-card accent-teal">
+<div class="kpi-label">Scope 2</div>
+<div class="kpi-value" style="color:var(--teal)">9.7 kt</div>
+<div class="kpi-sub">Purchased Energy</div>
+</div>
+<div class="kpi-card accent-purple">
+<div class="kpi-label">Scope 3</div>
+<div class="kpi-value" style="color:var(--purple)">25.8 kt</div>
+<div class="kpi-sub">Value Chain</div>
+</div>
+<div class="kpi-card accent-amber">
+<div class="kpi-label">Avg Assurance</div>
+<div class="kpi-value" style="color:var(--amber)">73/100</div>
+<div class="kpi-sub">89 line items</div>
+</div>
+<div class="kpi-card accent-red">
+<div class="kpi-label">Flagged Items</div>
+<div class="kpi-value" style="color:var(--red)">14</div>
+<div class="kpi-sub">Require review</div>
+</div>
+<div class="kpi-card accent-purple">
+<div class="kpi-label">2027 SC3 Ready</div>
+<div class="kpi-value" style="color:var(--purple)">22</div>
+<div class="kpi-sub">Scope 3 items</div>
+</div>
+</div>
+
+<!-- STATUS PANELS -->
+
+<div class="panels-grid">
+
+```
+<!-- Assurance Quality -->
+<div class="panel">
+<div class="panel-header">Assurance Quality Index</div>
+<div class="panel-body">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<span style="font-size:12px;color:var(--text3)">Overall Score</span>
+<span class="score-chip score-mid">73</span>
+</div>
+<div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:4px">
+<div style="width:73%;height:100%;background:#f59e0b;border-radius:4px"></div>
+</div>
+<div style="text-align:right;font-size:10px;color:var(--red);margin-bottom:14px">▲ Flag zone below 80</div>
+<div class="mini-bar-row">
+<div class="mini-bar-label"><span>Data Source (max 40)</span><span>31/40</span></div>
+<div class="mini-bar-track"><div class="mini-bar-fill" style="width:77.5%;background:var(--teal)"></div></div>
+</div>
+<div class="mini-bar-row">
+<div class="mini-bar-label"><span>Doc Match (max 30)</span><span>22/30</span></div>
+<div class="mini-bar-track"><div class="mini-bar-fill" style="width:73.3%;background:var(--brand)"></div></div>
+</div>
+<div class="mini-bar-row">
+<div class="mini-bar-label"><span>EF Recency (max 20)</span><span>14/20</span></div>
+<div class="mini-bar-track"><div class="mini-bar-fill" style="width:70%;background:#f59e0b"></div></div>
+</div>
+<div class="mini-bar-row">
+<div class="mini-bar-label"><span>Completeness (max 10)</span><span>6/10</span></div>
+<div class="mini-bar-track"><div class="mini-bar-fill" style="width:60%;background:#8b5cf6"></div></div>
+</div>
+<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px">
+<span style="color:var(--text3)">Limited Assurance Coverage</span>
+<span style="font-weight:700;color:var(--teal)">81.2%</span>
+</div>
+</div>
+</div>
+
+<!-- SB 253 Checklist -->
+<div class="panel">
+<div class="panel-header">SB 253 Compliance Checklist</div>
+<div class="check-row"><div><div class="check-row-label">Scope 1 Disclosure</div><div class="check-row-note">Required FY2025</div></div><span class="badge badge-green">Compliant</span></div>
+<div class="check-row"><div><div class="check-row-label">Scope 2 Disclosure</div><div class="check-row-note">Required FY2025</div></div><span class="badge badge-green">Compliant</span></div>
+<div class="check-row"><div><div class="check-row-label">Limited Assurance</div><div class="check-row-note">Due Aug 10, 2026</div></div><span class="badge badge-amber">In Progress</span></div>
+<div class="check-row"><div><div class="check-row-label">Scope 3 Disclosure</div><div class="check-row-note">Mandatory FY2026</div></div><span class="badge badge-purple">Optional*</span></div>
+<div class="check-row"><div><div class="check-row-label">Third-Party Review</div><div class="check-row-note">Pre-filing required</div></div><span class="badge badge-red">Not Started</span></div>
+</div>
+
+<!-- Scope Distribution -->
+<div class="panel">
+<div class="panel-header">Scope Distribution</div>
+<div class="panel-body">
+<div class="scope-bar-wrap">
+<div class="scope-bar-meta">
+<span style="font-size:12px;color:var(--text3)">Scope 1</span>
+<span style="font-size:12px;font-weight:600;color:var(--brand)">12.8 kt <span style="color:var(--text4);font-weight:400">(26.6%)</span></span>
+</div>
+<div class="scope-bar-track"><div class="scope-bar-fill" style="width:26.6%;background:var(--brand)"></div></div>
+</div>
+<div class="scope-bar-wrap">
+<div class="scope-bar-meta">
+<span style="font-size:12px;color:var(--text3)">Scope 2</span>
+<span style="font-size:12px;font-weight:600;color:var(--teal)">9.7 kt <span style="color:var(--text4);font-weight:400">(20.1%)</span></span>
+</div>
+<div class="scope-bar-track"><div class="scope-bar-fill" style="width:20.1%;background:#14b8a6"></div></div>
+</div>
+<div class="scope-bar-wrap">
+<div class="scope-bar-meta">
+<span style="font-size:12px;color:var(--text3)">Scope 3</span>
+<span style="font-size:12px;font-weight:600;color:var(--purple)">25.8 kt <span style="color:var(--text4);font-weight:400">(53.3%)</span></span>
+</div>
+<div class="scope-bar-track"><div class="scope-bar-fill" style="width:53.3%;background:#8b5cf6"></div></div>
+</div>
+<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px">
+<span style="color:var(--text3)">Scope 3 items 2027-ready</span>
+<span style="font-weight:700;color:var(--purple)">22 / 38</span>
+</div>
+</div>
+</div>
+```
+
+</div>
+
+<!-- TABS -->
+
+<div class="tab-container">
+<div class="tab-bar">
+<button class="tab-btn active" onclick="switchTab('inventory',this)">Emission Inventory</button>
+<button class="tab-btn" onclick="switchTab('redflags',this)">Red Flag Panel <span class="tab-alert">3</span></button>
+<button class="tab-btn" onclick="switchTab('upload',this)">Ingest Data</button>
+</div>
+
+```
+<!-- INVENTORY TAB -->
+<div id="tab-inventory" class="tab-pane active">
+<div class="toolbar">
+<span style="font-size:12px;color:var(--text3)">Filter:</span>
+<button class="filter-btn active" onclick="filterScope('ALL',this)">All Scopes</button>
+<button class="filter-btn" onclick="filterScope('1',this)">Scope 1</button>
+<button class="filter-btn" onclick="filterScope('2',this)">Scope 2</button>
+<button class="filter-btn" onclick="filterScope('3',this)">Scope 3</button>
+<button class="filter-btn" id="flag-filter-btn" onclick="toggleFlagFilter(this)">Flagged Only</button>
+<span class="record-count" id="record-count">10 of 10 records</span>
+</div>
+<div style="overflow-x:auto">
+<table class="data-table" id="inventory-table">
+<thead>
+<tr>
+<th>Score</th><th>Reference</th><th>Vendor / Source</th>
+<th>Scope</th><th>Activity</th><th class="text-right">CO₂e (t)</th>
+<th>EF Source</th><th>Method</th><th>Invoice #</th><th>Status</th>
+</tr>
+</thead>
+<tbody id="inventory-body"></tbody>
+</table>
+</div>
+</div>
+
+<!-- RED FLAGS TAB -->
+<div id="tab-redflags" class="tab-pane">
+<div class="alert-banner">
+<span style="color:var(--red);font-weight:700">⚠ 3 active contradictions</span>
+<span style="color:var(--text3)">— Spend-based vs activity-based variance exceeds 5% GHG Protocol tolerance</span>
+</div>
+<div style="overflow-x:auto;padding:0 16px 16px">
+<table class="data-table">
+<thead>
+<tr>
+<th>ID</th><th>Vendor</th><th>Type</th><th>Severity</th>
+<th class="text-right">Expected CO₂e (t)</th><th class="text-right">Actual CO₂e (t)</th>
+<th class="text-right">Variance</th><th>Description</th><th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-left:3px solid var(--red)">
+<td style="font-size:11px;color:var(--text4)">CF-001</td>
+<td class="fw600">DHL Freight</td>
+<td style="font-size:12px">SPEND ACTIVITY MISMATCH</td>
+<td><span class="badge badge-red">High</span></td>
+<td class="text-right">2,890.1</td>
+<td class="text-right fw600" style="color:var(--red)">3,140.8</td>
+<td class="text-right fw600" style="color:var(--red)">+8.67%</td>
+<td style="font-size:11px;color:var(--text3);max-width:260px">Spend-based CO₂e differs from activity-based estimate by 8.67% — exceeds 5% GHG Protocol tolerance.</td>
+<td><div style="display:flex;gap:6px"><button class="filter-btn">Assign</button><button class="filter-btn">Accept</button><button class="filter-btn">Resubmit</button></div></td>
+</tr>
+<tr style="border-left:3px solid #f59e0b;background:var(--surface2)">
+<td style="font-size:11px;color:var(--text4)">CF-002</td>
+<td class="fw600">Delta Air Lines</td>
+<td style="font-size:12px">SPEND ACTIVITY MISMATCH</td>
+<td><span class="badge badge-amber">Medium</span></td>
+<td class="text-right">1,680.0</td>
+<td class="text-right fw600" style="color:var(--red)">1,820.5</td>
+<td class="text-right fw600" style="color:var(--amber)">+8.36%</td>
+<td style="font-size:11px;color:var(--text3);max-width:260px">Travel spend-based CO₂e exceeds DEFRA 2026 activity-based benchmark by 8.4%.</td>
+<td><div style="display:flex;gap:6px"><button class="filter-btn">Assign</button><button class="filter-btn">Accept</button><button class="filter-btn">Resubmit</button></div></td>
+</tr>
+<tr style="border-left:3px solid var(--red)">
+<td style="font-size:11px;color:var(--text4)">CF-003</td>
+<td class="fw600">Enterprise Fleet</td>
+<td style="font-size:12px">FACTOR VERSION CONFLICT</td>
+<td><span class="badge badge-red">High</span></td>
+<td class="text-right">1,320.1</td>
+<td class="text-right fw600" style="color:var(--red)">1,244.8</td>
+<td class="text-right fw600" style="color:var(--red)">+5.70%</td>
+<td style="font-size:11px;color:var(--text3);max-width:260px">EPA 2025 factor used — recalculation with EPA 2026 yields +5.7% variance. Reprocessing required.</td>
+<td><div style="display:flex;gap:6px"><button class="filter-btn">Assign</button><button class="filter-btn">Accept</button><button class="filter-btn">Resubmit</button></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- INGEST TAB -->
+<div id="tab-upload" class="tab-pane">
+<div class="upload-grid">
+<div class="upload-card">
+<div class="panel-header">Structured Data (ERP Export)</div>
+<div style="padding:16px">
+<p style="font-size:12px;color:var(--text4);margin-bottom:12px">SAP, Oracle, NetSuite CSV files</p>
+<div class="upload-zone">
+<div class="upload-icon">↑</div>
+<div class="upload-hint">Drop CSV file here or click to browse</div>
+<div class="upload-ep"><code>POST /ingest/csv</code></div>
+</div>
+<div class="upload-info">ⓘ Structured data yields +28 base assurance points. Required columns: activity_type, co2e_tonnes.</div>
+</div>
+</div>
+<div class="upload-card">
+<div class="panel-header">Unstructured Documents (PDF)</div>
+<div style="padding:16px">
+<p style="font-size:12px;color:var(--text4);margin-bottom:12px">Utility bills, freight invoices, receipts</p>
+<div class="upload-zone">
+<div class="upload-icon">↑</div>
+<div class="upload-hint">Drop PDF file here or click to browse</div>
+<div class="upload-ep"><code>POST /ingest/pdf</code></div>
+</div>
+<div class="upload-info">ⓘ LLM extracts Invoice #, Meter ID, Fuel Type, and Emission Factor source automatically.</div>
+</div>
+</div>
+</div>
+</div>
+```
+
+</div>
+
+<!-- AUDIT EXPORT -->
+
+<div class="export-bar">
 <div>
-<h4 class="text-sm font-black text-slate-900">VERIFY.AI Smart Layer</h4>
-<p class="text-[10px] text-emerald-600 font-bold uppercase">Assurance Check: PASSING</p>
+<h4>One-Click Audit Export</h4>
+<p>Generates ZIP: original invoices + GHG report + assurance scores + contradiction log · 89 items · 3 flags</p>
 </div>
+<button class="btn-export" id="export-btn" onclick="doExport()">Export Audit Package</button>
 </div>
-<p class="text-xs text-slate-600 mb-6">Found **1,402** unverified data points in this dashboard. Click below to generate a **Limited Assurance Certificate** for this data.</p>
-<button class="w-full bg-[#00d2be] text-black font-bold py-3 rounded-xl text-sm hover:brightness-110 transition">RECONCILE & ASSURE DATA</button>
+
+<!-- PAGE FOOTER -->
+
+<div class="page-footer">
+<span>ClimFra VeriSource · SB 253 Limited Assurance Engine · Prompt v2.4-sb253</span>
+<span>Emission Factors: EPA 2026 v1 · DEFRA 2026 v1 · GHG Protocol AR6</span>
+<span>FY2025 · Filing due 2026-08-10</span>
 </div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</div>
+
+</div><!-- /main -->
 
 <script>
-function enterSystem() {
-document.getElementById('loginState').classList.add('hidden');
-document.getElementById('mainDashboard').classList.remove('hidden');
+const DATA = [
+{ id:"BATCH-A1-0001", vendor:"Pacific Gas & Electric", scope:2, activity:"Grid Electricity", unit:"kWh", co2e:4210.3, invoice:"PGE-2025-112847", meter:"MTR-8847221", fuel:"Grid Electricity", ef:"EPA_2026", method:"activity based", score:94, ds:40, dm:28, er:20, cp:6, flag:false, flags:[], sb253:true, s3:false, conf:97 },
+{ id:"BATCH-A1-0002", vendor:"Shell Fleet", scope:1, activity:"Diesel Combustion", unit:"gallons", co2e:892.1, invoice:"SFL-448821", meter:null, fuel:"Diesel", ef:"EPA_2026", method:"activity based", score:88, ds:38, dm:24, er:20, cp:6, flag:false, flags:[], sb253:true, s3:false, conf:91 },
+{ id:"BATCH-A1-0003", vendor:"DHL Freight", scope:3, activity:"Road Freight", unit:"tonne-km", co2e:3140.8, invoice:null, meter:null, fuel:"Diesel", ef:"DEFRA_2025", method:"spend based", score:52, ds:14, dm:10, er:12, cp:6, flag:true, flags:["No invoice number — cannot verify document chain","Spend-based method reduces data source confidence","Emission factor is 2025 vintage — update to 2026"], sb253:false, s3:true, conf:61 },
+{ id:"BATCH-A1-0004", vendor:"Calpine Natural Gas", scope:1, activity:"Natural Gas", unit:"therms", co2e:2180.4, invoice:"CAL-2025-77341", meter:"GAS-MTR-00412", fuel:"Natural Gas", ef:"EPA_2026", method:"activity based", score:91, ds:40, dm:25, er:20, cp:6, flag:false, flags:[], sb253:true, s3:false, conf:95 },
+{ id:"BATCH-A1-0005", vendor:"Delta Air Lines", scope:3, activity:"Air Travel", unit:"passenger-km", co2e:1820.5, invoice:"DAL-CORP-88421", meter:null, fuel:"Jet Fuel", ef:"DEFRA_2026", method:"spend based", score:67, ds:22, dm:20, er:20, cp:5, flag:true, flags:["Spend-based method reduces data source confidence","Only 4/6 required fields populated"], sb253:false, s3:true, conf:74 },
+{ id:"BATCH-A1-0006", vendor:"Municipal Water District",scope:3, activity:"Water Supply", unit:"m³", co2e:42.1, invoice:"MWD-2025-3381", meter:"WTR-9921", fuel:null, ef:"UNKNOWN", method:"activity based", score:44, ds:22, dm:20, er:0, cp:2, flag:true, flags:["Emission factor source unidentified — requires manual verification","Only 3/6 required fields populated"], sb253:false, s3:false, conf:55 },
+{ id:"BATCH-A1-0007", vendor:"Chevron Lubricants", scope:1, activity:"Refrigerants", unit:"kg HFC-134a", co2e:318.7, invoice:"CHV-LUB-2025-441", meter:null, fuel:"HFC-134a", ef:"EPA_2026", method:"activity based", score:82, ds:38, dm:22, er:20, cp:2, flag:false, flags:[], sb253:true, s3:false, conf:88 },
+{ id:"BATCH-A1-0008", vendor:"Maersk Line", scope:3, activity:"Ocean Freight", unit:"tonne-km", co2e:5840.2, invoice:"MSK-2025-BL-88122", meter:null, fuel:"HFO", ef:"IMO_2023", method:"hybrid", score:71, ds:28, dm:25, er:8, cp:10, flag:true, flags:["Non-standard EF source: IMO_2023"], sb253:false, s3:true, conf:84 },
+{ id:"BATCH-A1-0009", vendor:"Enterprise Fleet Mgmt", scope:1, activity:"Vehicle Fleet", unit:"gallons", co2e:1244.8, invoice:null, meter:null, fuel:"Petrol", ef:"EPA_2025", method:"spend based", score:38, ds:10, dm:8, er:12, cp:8, flag:true, flags:["No invoice number — cannot verify document chain","Emission factor is 2025 vintage — update to 2026","Spend-based method reduces confidence","Low extraction confidence: 48%"], sb253:false, s3:false, conf:48 },
+{ id:"BATCH-A1-0010", vendor:"Southern California Edison",scope:2, activity:"Grid Electricity", unit:"kWh", co2e:3810.2, invoice:"SCE-2025-91882", meter:"MTR-SCE-7712", fuel:"Grid Electricity", ef:"EPA_2026", method:"activity based", score:96, ds:40, dm:30, er:20, cp:6, flag:false, flags:[], sb253:true, s3:false, conf:99 },
+];
+
+let activeScope = 'ALL', showFlagged = false, selectedId = null;
+
+function scoreClass(s){ return s>=80?'score-high':s>=60?'score-mid':'score-low'; }
+function efClass(ef){
+if(!ef||ef==='UNKNOWN') return 'ef-red';
+if(ef.includes('2026')) return 'ef-green';
+return 'ef-amber';
+}
+function scopeBadge(s){
+const cfg={1:{cls:'badge-blue',lbl:'Scope 1'},2:{cls:'badge-teal',lbl:'Scope 2'},3:{cls:'badge-purple',lbl:'Scope 3'}};
+const c=cfg[s]||cfg[1]; return `<span class="badge ${c.cls}">${c.lbl}</span>`;
+}
+function barHtml(val,max,color){
+return `<div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:6px;background:var(--bg);border-radius:3px;overflow:hidden"><div style="width:${(val/max)*100}%;height:100%;background:${color};border-radius:3px"></div></div><span style="font-size:11px;color:var(--text3);min-width:28px;text-align:right">${val}/${max}</span></div>`;
 }
 
-function toggleView(type) {
-const nativeBtn = document.getElementById('nativeBtn');
-const pluginBtn = document.getElementById('pluginBtn');
-const nativeView = document.getElementById('nativeView');
-const pluginView = document.getElementById('pluginView');
+function renderTable(){
+const body = document.getElementById('inventory-body');
+const rows = DATA.filter(r=>{
+if(activeScope!=='ALL'&&r.scope!==parseInt(activeScope)) return false;
+if(showFlagged&&!r.flag) return false;
+return true;
+});
+document.getElementById('record-count').textContent=`${rows.length} of ${DATA.length} records`;
 
-if (type === 'plugin') {
-pluginBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
-pluginBtn.classList.remove('text-slate-500');
-nativeBtn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
-nativeBtn.classList.add('text-slate-500');
+let html='';
+rows.forEach((r,i)=>{
+const isSel = selectedId===r.id;
+const rowBg = isSel?'background:#eff4ff!important;'
+: r.flag?'background:#fff8f8!important;':'';
+const flagBorder = r.flag?'border-left:3px solid var(--red)':'border-left:3px solid transparent';
+html+=`<tr class="${isSel?'selected':''}" style="${rowBg}${flagBorder}" onclick="toggleDetail('${r.id}')">
+<td><span class="score-chip ${scoreClass(r.score)}">${r.score}</span></td>
+<td style="font-size:11px;color:var(--text4)">${r.id}</td>
+<td><div class="fw600">${r.vendor}</div>${r.meter?`<div style="font-size:11px;color:var(--text4)">Meter: ${r.meter}</div>`:''}</td>
+<td>${scopeBadge(r.scope)}</td>
+<td><div>${r.activity}</div><div style="font-size:11px;color:var(--text4)">${r.unit}</div></td>
+<td class="text-right fw600">${r.co2e.toLocaleString('en',{minimumFractionDigits:1})}</td>
+<td><span class="${efClass(r.ef)}">${r.ef||'UNKNOWN'}</span></td>
+<td style="font-size:12px;color:var(--text3)">${r.method}</td>
+<td style="font-size:12px">${r.invoice?r.invoice:`<span style="color:var(--red);font-weight:600">⚠ Missing</span>`}</td>
+<td>
+<div style="display:flex;flex-direction:column;gap:3px">
+${r.flag?'<span class="badge badge-red">Review Required</span>':'<span class="badge badge-green">Pass</span>'}
+${r.s3?'<span class="badge badge-purple">2027 Ready</span>':''}
+</div>
+</td>
+</tr>`;
 
-nativeView.classList.add('hidden');
-pluginView.classList.remove('hidden');
-} else {
-nativeBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
-nativeBtn.classList.remove('text-slate-500');
-pluginBtn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
-pluginBtn.classList.add('text-slate-500');
-
-pluginView.classList.add('hidden');
-nativeView.classList.remove('hidden');
+if(isSel){
+html+=`<tr class="detail-row"><td colspan="10">
+<div class="detail-inner">
+<div>
+<div class="detail-section-title">Score Breakdown</div>
+<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Data Source</div>${barHtml(r.ds,40,'var(--teal)')}</div>
+<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Doc Match</div>${barHtml(r.dm,30,'var(--brand)')}</div>
+<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">EF Recency</div>${barHtml(r.er,20,'#f59e0b')}</div>
+<div><div style="font-size:11px;color:var(--text3);margin-bottom:4px">Completeness</div>${barHtml(r.cp,10,'#8b5cf6')}</div>
+</div>
+<div>
+<div class="detail-section-title">Evidence Metadata</div>
+<div class="meta-row"><span class="meta-key">Invoice #</span><span class="meta-val ${!r.invoice?'warn':''}">${r.invoice||'Not found'}</span></div>
+<div class="meta-row"><span class="meta-key">Meter ID</span><span class="meta-val">${r.meter||'N/A'}</span></div>
+<div class="meta-row"><span class="meta-key">Fuel Type</span><span class="meta-val">${r.fuel||'Unclassified'}</span></div>
+<div class="meta-row"><span class="meta-key">EF Source</span><span class="meta-val ${(!r.ef||r.ef==='UNKNOWN')?'warn':''}">${r.ef||'Unknown'}</span></div>
+<div class="meta-row"><span class="meta-key">Data Method</span><span class="meta-val">${r.method}</span></div>
+<div class="meta-row"><span class="meta-key">LLM Confidence</span><span class="meta-val">${r.conf}%</span></div>
+</div>
+<div>
+<div class="detail-section-title">Audit Flags ${r.flags.length>0?`<span style="color:var(--red)">(${r.flags.length})</span>`:''}</div>
+${r.flags.length===0
+?'<div style="color:var(--teal);font-size:12px">✓ No flags raised — item passes all audit checks</div>'
+:r.flags.map(f=>`<div class="flag-item"><span>⚠</span><span>${f}</span></div>`).join('')}
+</div>
+</div>
+</td></tr>`;
 }
+});
+body.innerHTML=html;
 }
+
+function toggleDetail(id){
+selectedId=(selectedId===id?null:id);
+renderTable();
+}
+
+function filterScope(s,btn){
+activeScope=s;
+document.querySelectorAll('.toolbar .filter-btn:not(#flag-filter-btn)').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+renderTable();
+}
+
+function toggleFlagFilter(btn){
+showFlagged=!showFlagged;
+btn.classList.toggle('active',showFlagged);
+renderTable();
+}
+
+function switchTab(id,btn){
+document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+btn.classList.add('active');
+document.getElementById('tab-'+id).classList.add('active');
+}
+
+function doExport(){
+const btn=document.getElementById('export-btn');
+btn.disabled=true; btn.textContent='Generating…';
+setTimeout(()=>{
+btn.disabled=false;
+btn.textContent='✓ Download Audit Package';
+btn.classList.add('success');
+},2200);
+}
+
+// Deadline counter
+(function(){
+const d=Math.ceil((new Date('2026-08-10')-new Date())/86400000);
+document.getElementById('days-label').textContent=d;
+})();
+
+renderTable();
 </script>
+
 </body>
 </html>
