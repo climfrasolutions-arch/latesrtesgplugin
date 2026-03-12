@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERIFY.AI | The Global Assurance Layer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root { --verify-blue: #0070d2; --verify-dark: #032d60; }
+body { font-family: 'Inter', sans-serif; background: #f3f4f6; }
+.plugin-overlay { border: 2px solid #00d2be; box-shadow: 0 0 20px rgba(0,210,190,0.2); }
+.audit-pulse { border: 1px solid #ff5a5f; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 90, 95, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 90, 95, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 90, 95, 0); } }
+.hidden { display: none; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<div id="loginState" class="flex h-screen items-center justify-center">
+<div class="bg-white p-12 rounded-3xl shadow-2xl w-full max-w-md border border-zinc-100">
+<div class="mb-10 text-center">
+<div class="inline-block p-3 bg-blue-50 rounded-2xl mb-4">
+<svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+</div>
+<h1 class="text-2xl font-black text-slate-900 tracking-tight">VERIFY.AI</h1>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Enterprise Assurance Gateway</p>
+</div>
+<button onclick="enterSystem()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition-all shadow-xl shadow-slate-200">
+SSO LOGIN (AZURE/SAP)
+</button>
+</div>
+</div>
+
+<div id="mainDashboard" class="hidden flex h-screen overflow-hidden">
+
+<aside class="w-20 bg-slate-900 flex flex-col items-center py-8 gap-8 border-r border-slate-800">
+<div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-white">V</div>
+<div class="space-y-6 text-slate-500">
+<div class="cursor-pointer hover:text-white transition">⊞</div>
+<div class="cursor-pointer hover:text-white transition">◈</div>
+<div class="cursor-pointer hover:text-white transition">⌘</div>
+</div>
+</aside>
+
+<main class="flex-1 flex flex-col bg-slate-50">
+<header class="h-20 bg-white border-b flex items-center justify-between px-10">
+<div class="flex items-center gap-4">
+<h2 class="font-bold text-slate-800">Verification Terminal</h2>
+<span class="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-1 rounded">SOC2 TYPE II ACTIVE</span>
+</div>
+<div class="flex items-center bg-slate-100 p-1 rounded-full border border-slate-200">
+<button id="nativeBtn" onclick="toggleView('native')" class="px-4 py-2 rounded-full text-[10px] font-bold bg-white shadow-sm">NATIVE OS</button>
+<button id="pluginBtn" onclick="toggleView('plugin')" class="px-4 py-2 rounded-full text-[10px] font-bold text-slate-500">PLUGIN MODE</button>
+</div>
+</header>
+
+<div class="p-10">
+<div id="nativeView" class="space-y-6">
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+<p class="text-xs font-bold text-slate-400 uppercase mb-2">Assurance Level</p>
+<h3 class="text-4xl font-black text-blue-600">A+</h3>
+<p class="text-[10px] text-emerald-500 font-bold mt-2">Verified for Aug 10 California Deadline</p>
+</div>
+<div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm col-span-2">
+<p class="text-xs font-bold text-slate-400 uppercase mb-2">Evidence Stream (Live)</p>
+<div class="space-y-3 mt-4">
+<div class="flex justify-between items-center text-xs border-b pb-2">
+<span class="font-mono text-slate-400">TX_9901_LHR</span>
+<span class="font-bold">Jet Fuel A1 (British Airways)</span>
+<span class="text-emerald-500 font-bold">99.1% Confidence</span>
+</div>
+<div class="flex justify-between items-center text-xs border-b pb-2">
+<span class="font-mono text-slate-400">TX_9905_NYC</span>
+<span class="font-bold">Office HVAC (ConEd)</span>
+<span class="text-emerald-500 font-bold">98.4% Confidence</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="pluginView" class="hidden">
+<div class="bg-white rounded-3xl p-10 border-2 border-dashed border-slate-200 relative overflow-hidden grayscale">
+<div class="absolute top-4 right-4 bg-zinc-800 text-white text-[10px] px-2 py-1 rounded font-bold">GENERIC THIRD-PARTY DASHBOARD (SAP/SFDC)</div>
+<h3 class="text-3xl font-black text-slate-200 mb-8 tracking-tighter">Existing Carbon Analytics</h3>
+
+<div class="grid grid-cols-2 gap-10 opacity-20">
+<div class="h-32 bg-slate-100 rounded-2xl"></div>
+<div class="h-32 bg-slate-100 rounded-2xl"></div>
+</div>
+
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+<div class="plugin-overlay bg-white p-8 rounded-2xl shadow-2xl">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white">V</div>
+<div>
+<h4 class="text-sm font-black text-slate-900">VERIFY.AI Smart Layer</h4>
+<p class="text-[10px] text-emerald-600 font-bold uppercase">Assurance Check: PASSING</p>
+</div>
+</div>
+<p class="text-xs text-slate-600 mb-6">Found **1,402** unverified data points in this dashboard. Click below to generate a **Limited Assurance Certificate** for this data.</p>
+<button class="w-full bg-[#00d2be] text-black font-bold py-3 rounded-xl text-sm hover:brightness-110 transition">RECONCILE & ASSURE DATA</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<script>
+function enterSystem() {
+document.getElementById('loginState').classList.add('hidden');
+document.getElementById('mainDashboard').classList.remove('hidden');
+}
+
+function toggleView(type) {
+const nativeBtn = document.getElementById('nativeBtn');
+const pluginBtn = document.getElementById('pluginBtn');
+const nativeView = document.getElementById('nativeView');
+const pluginView = document.getElementById('pluginView');
+
+if (type === 'plugin') {
+pluginBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+pluginBtn.classList.remove('text-slate-500');
+nativeBtn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+nativeBtn.classList.add('text-slate-500');
+
+nativeView.classList.add('hidden');
+pluginView.classList.remove('hidden');
+} else {
+nativeBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+nativeBtn.classList.remove('text-slate-500');
+pluginBtn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+pluginBtn.classList.add('text-slate-500');
+
+pluginView.classList.add('hidden');
+nativeView.classList.remove('hidden');
+}
+}
+</script>
+</body>
+</html>
